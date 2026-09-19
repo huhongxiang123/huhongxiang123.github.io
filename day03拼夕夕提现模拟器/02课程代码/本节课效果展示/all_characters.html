@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热门IP角色收藏馆</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        h1 {
+            color: #06b6d4;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.2em;
+        }
+
+        .filter-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 25px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            border-color: #06b6d4;
+            color: #06b6d4;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+            color: white;
+            border-color: #06b6d4;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .character-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.4);
+            border-color: #06b6d4;
+        }
+
+        .card-header {
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(6, 182, 212, 0.1) 100%);
+            z-index: 1;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .rarity-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: white;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .rarity-ssr {
+            background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .rarity-sr {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+            box-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+        }
+
+        .rarity-r {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+        }
+
+        .character-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .card-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #06b6d4;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .card-info {
+            font-size: 0.9em;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .card-desc {
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .draw-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .draw-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #06b6d4;
+            text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .draw-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .draw-btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .draw-btn-single {
+            background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+        }
+
+        .draw-btn-ten {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .draw-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+            border-color: #06b6d4;
+        }
+
+        .result-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #06b6d4;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .result-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            animation: cardPop 0.5s;
+        }
+
+        @keyframes cardPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .result-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .result-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #06b6d4;
+        }
+
+        .result-rarity {
+            font-size: 0.8em;
+            color: #94a3b8;
+        }
+
+        .empty-result {
+            text-align: center;
+            color: #94a3b8;
+            padding: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .characters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .draw-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .draw-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>热门IP角色收藏馆</h1>
+            <p class="subtitle">火影忍者 × 海贼王 × 龙珠 × 游戏王 × 鬼灭之刃</p>
+        </header>
+
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="SSR">SSR</button>
+                <button class="filter-btn" data-filter="SR">SR</button>
+                <button class="filter-btn" data-filter="R">R</button>
+                <button class="filter-btn" data-filter="naruto">火影忍者</button>
+                <button class="filter-btn" data-filter="onepiece">海贼王</button>
+                <button class="filter-btn" data-filter="dragonball">龙珠</button>
+                <button class="filter-btn" data-filter="yugioh">游戏王</button>
+                <button class="filter-btn" data-filter="demon-slayer">鬼灭之刃</button>
+            </div>
+        </div>
+
+        <div class="characters-grid" id="charactersGrid"></div>
+
+        <div class="draw-section">
+            <h2 class="draw-title">🎁 盲盒抽取</h2>
+            <div class="draw-buttons">
+                <button class="draw-btn draw-btn-single" onclick="drawSingle()">🎲 单抽</button>
+                <button class="draw-btn draw-btn-ten" onclick="drawTen()">📦 十连抽</button>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h2 class="result-title">📋 已抽取角色</h2>
+            <div class="result-cards" id="resultCards">
+                <div class="empty-result">
+                    还没有抽取角色，快来试试手气吧！
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let characters = [];
+        let drawnCharacters = [];
+
+        async function loadCharacters() {
+            try {
+                const response = await fetch('characters.json');
+                const data = await response.json();
+                
+                // 转换数据格式
+                characters = [];
+                for (const [rarity, chars] of Object.entries(data)) {
+                    chars.forEach(char => {
+                        // 提取IP系列信息
+                        let series = 'other';
+                        if (char.name.includes('火影')) {
+                            series = 'naruto';
+                        } else if (char.name.includes('海贼')) {
+                            series = 'onepiece';
+                        } else if (char.name.includes('龙珠') || char.name.includes('悟空') || char.name.includes('贝吉塔')) {
+                            series = 'dragonball';
+                        } else if (char.name.includes('游戏王')) {
+                            series = 'yugioh';
+                        } else if (char.name.includes('鬼灭')) {
+                            series = 'demon-slayer';
+                        }
+                        
+                        characters.push({
+                            name: char.name,
+                            rarity: rarity,
+                            series: series,
+                            image: char.image,
+                            info: `${getSeriesName(series)} - ${char.name}`,
+                            description: `来自热门IP的角色：${char.name}`
+                        });
+                    });
+                }
+                
+                displayCharacters();
+            } catch (error) {
+                console.error('加载角色数据失败:', error);
+            }
+        }
+
+        function getSeriesName(series) {
+            const seriesNames = {
+                'naruto': '火影忍者',
+                'onepiece': '海贼王',
+                'dragonball': '龙珠',
+                'yugioh': '游戏王',
+                'demon-slayer': '鬼灭之刃',
+                'other': '其他'
+            };
+            return seriesNames[series] || '其他';
+        }
+
+        function displayCharacters(filter = 'all') {
+            const grid = document.getElementById('charactersGrid');
+            let filteredChars = characters;
+
+            if (filter !== 'all') {
+                if (['SSR', 'SR', 'R'].includes(filter)) {
+                    filteredChars = characters.filter(char => char.rarity === filter);
+                } else {
+                    filteredChars = characters.filter(char => char.series === filter);
+                }
+            }
+
+            grid.innerHTML = filteredChars.map(char => `
+                <div class="character-card" data-rarity="${char.rarity}" data-series="${char.series}">
+                    <div class="card-header">
+                        <div class="rarity-badge rarity-${char.rarity.toLowerCase()}">${char.rarity}</div>
+                        <img src="${char.image}" alt="${char.name}" class="card-image">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${char.name}</h3>
+                        <p class="card-info">${char.info}</p>
+                        <p class="card-desc">${char.description}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getRandomRarity() {
+            const rand = Math.random() * 100;
+            if (rand <= 5) return 'SSR';
+            if (rand <= 25) return 'SR';
+            return 'R';
+        }
+
+        function drawCharacter() {
+            const rarity = getRandomRarity();
+            const eligibleChars = characters.filter(char => char.rarity === rarity);
+            const character = eligibleChars[Math.floor(Math.random() * eligibleChars.length)];
+            return character;
+        }
+
+        function drawSingle() {
+            if (characters.length === 0) {
+                alert('角色数据尚未加载，请刷新页面重试！');
+                return;
+            }
+            const character = drawCharacter();
+            drawnCharacters.push(character);
+            updateResultDisplay();
+        }
+
+        function drawTen() {
+            if (characters.length === 0) {
+                alert('角色数据尚未加载，请刷新页面重试！');
+                return;
+            }
+            for (let i = 0; i < 10; i++) {
+                const character = drawCharacter();
+                drawnCharacters.push(character);
+            }
+            updateResultDisplay();
+        }
+
+        function updateResultDisplay() {
+            const resultContainer = document.getElementById('resultCards');
+            
+            if (drawnCharacters.length === 0) {
+                resultContainer.innerHTML = `
+                    <div class="empty-result">
+                        还没有抽取角色，快来试试手气吧！
+                    </div>
+                `;
+                return;
+            }
+
+            resultContainer.innerHTML = drawnCharacters.map(char => `
+                <div class="result-card" style="border: 3px solid ${char.rarity === 'SSR' ? '#ffd700' : char.rarity === 'SR' ? '#9b59b6' : '#3498db'}">
+                    <img src="${char.image}" alt="${char.name}" class="result-image">
+                    <div class="result-name">${char.name}</div>
+                    <div class="result-rarity">${char.rarity} · ${char.info.split(' - ')[0]}</div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCharacters();
+            
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    displayCharacters(this.dataset.filter);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

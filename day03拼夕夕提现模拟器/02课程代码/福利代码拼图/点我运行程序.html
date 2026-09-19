@@ -1,0 +1,128 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PyPuzzle Lite - Python 代码拼图</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-wrap">
+    <header class="brand-bar">
+      <div class="logo-mark" aria-hidden="true">Py</div>
+      <div class="brand-copy">
+        <strong>PyPuzzle</strong>
+        <span>Python 代码拼图</span>
+      </div>
+      <div class="brand-chip">Lite</div>
+    </header>
+
+    <main class="view-stack">
+      <section id="view-home" class="view is-active">
+        <article id="home-hero" class="panel hero-panel">
+          <h1>Python 代码拼图</h1>
+          <p>把打乱的代码拼回正确顺序，边玩边理解 Python。</p>
+          <div class="hero-actions">
+            <button id="start-btn" class="btn btn-primary" type="button">开始闯关</button>
+            <button id="continue-btn" class="btn btn-ghost" type="button">继续上次练习</button>
+          </div>
+        </article>
+
+        <article id="home-category" class="panel">
+          <div class="panel-head between">
+            <h2>选择练习类型</h2>
+            <span id="selected-category-text" class="muted-text"></span>
+          </div>
+          <div id="category-grid" class="category-grid"></div>
+        </article>
+
+        <article id="home-progress" class="panel">
+          <h2>当前进度</h2>
+          <ul class="progress-list">
+            <li><span>已完成</span><strong id="summary-completed">0 题</strong></li>
+            <li><span>当前关卡</span><strong id="summary-category">全部题目</strong></li>
+            <li><span>当前连胜</span><strong id="summary-streak">0 题</strong></li>
+            <li><span>最高连胜</span><strong id="summary-best-streak">0 题</strong></li>
+          </ul>
+        </article>
+
+        <div id="home-banner" class="banner" hidden></div>
+      </section>
+
+      <section id="view-puzzle" class="view">
+        <article id="puzzle-head" class="panel puzzle-head">
+          <div class="puzzle-head-top">
+            <button id="puzzle-back-btn" class="icon-btn" type="button" aria-label="返回首页">←</button>
+            <div>
+              <p id="puzzle-stage" class="stage-label">输入输出练习</p>
+              <h2 id="puzzle-title">第 1 题</h2>
+            </div>
+          </div>
+          <p id="puzzle-description" class="puzzle-description"></p>
+        </article>
+
+        <article id="puzzle-workspace" class="panel">
+          <div id="code-list" class="code-list"></div>
+          <div id="puzzle-hint" class="hint-box">按住任意代码卡片拖动排序，然后点击提交。</div>
+        </article>
+
+        <article id="puzzle-actions" class="panel action-panel">
+          <button id="submit-btn" class="btn btn-primary" type="button">提交</button>
+          <button id="reset-btn" class="btn btn-ghost" type="button">重置</button>
+          <p id="puzzle-progress-text" class="small-meta">进度：1 / 20</p>
+        </article>
+      </section>
+
+      <section id="view-result" class="view">
+        <article id="result-panel" class="panel result-panel is-success">
+          <span id="result-status-tag" class="result-tag">拼图成功</span>
+          <h2 id="result-title">拼图成功！</h2>
+          <p id="result-subtitle" class="result-subtitle"></p>
+
+          <div id="result-code-list" class="result-code-list"></div>
+          <div id="result-explanation" class="explain-box"></div>
+          <p id="result-extra" class="small-meta"></p>
+
+          <div class="result-actions">
+            <button id="next-btn" class="btn btn-primary" type="button">下一题</button>
+            <button id="retry-btn" class="btn btn-primary-light" type="button">再试一次</button>
+            <button id="result-reset-btn" class="btn btn-ghost" type="button">重置顺序</button>
+            <button id="home-btn" class="btn btn-ghost" type="button">返回首页</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="view-stats" class="view">
+        <article id="stats-summary" class="panel">
+          <h2>学习统计</h2>
+          <div id="stats-grid" class="stats-grid"></div>
+        </article>
+
+        <article id="stats-categories" class="panel">
+          <h2>分类进度</h2>
+          <div id="category-progress-list" class="category-progress-list"></div>
+        </article>
+
+        <article id="stats-wrong" class="panel">
+          <div class="panel-head between">
+            <h2>错题记录</h2>
+            <button id="clear-wrong-btn" class="text-btn" type="button">清空错题</button>
+          </div>
+          <div id="wrong-list" class="wrong-list"></div>
+        </article>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="页面导航">
+      <button data-nav="home" class="nav-btn is-active" type="button">首页</button>
+      <button data-nav="practice" class="nav-btn" type="button">继续练习</button>
+      <button data-nav="stats" class="nav-btn" type="button">统计</button>
+    </nav>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="puzzle.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

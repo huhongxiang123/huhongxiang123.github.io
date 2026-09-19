@@ -1,0 +1,128 @@
+{
+    "SSR": [
+        {
+            "name": "原神-钟离",
+            "image": "images/原神-钟离.png"
+        },
+        {
+            "name": "原神-雷电将军",
+            "image": "images/原神-雷电将军.jpg"
+        },
+        {
+            "name": "海贼王-路飞",
+            "image": "images/海贼王-路飞.jpg"
+        },
+        {
+            "name": "海贼王-香克斯",
+            "image": "images/海贼王-香克斯.jpg"
+        },
+        {
+            "name": "火影忍者-鸣人",
+            "image": "images/火影忍者-鸣人.jpeg"
+        },
+        {
+            "name": "火影忍者-宇智波斑",
+            "image": "images/火影忍者-宇智波斑.webp"
+        },
+        {
+            "name": "龙珠-孙悟空(超级赛亚人)",
+            "image": "images/龙珠-孙悟空(超级赛亚人).jpg"
+        },
+        {
+            "name": "龙珠-贝吉塔",
+            "image": "images/龙珠-贝吉塔.jpg"
+        },
+        {
+            "name": "游戏王-武藤游戏",
+            "image": "images/游戏王-武藤游戏.jpeg"
+        },
+        {
+            "name": "鬼灭之刃-灶门炭治郎",
+            "image": "images/鬼灭之刃-灶门炭治郎.jpg"
+        }
+    ],
+    "SR": [
+        {
+            "name": "原神-胡桃",
+            "image": "images/原神-胡桃.jpg"
+        },
+        {
+            "name": "原神-甘雨",
+            "image": "images/原神-甘雨.jpg"
+        },
+        {
+            "name": "海贼王-索隆",
+            "image": "images/海贼王-索隆.jpg"
+        },
+        {
+            "name": "海贼王-山治",
+            "image": "images/海贼王-山治.jpg"
+        },
+        {
+            "name": "火影忍者-佐助",
+            "image": "images/火影忍者-佐助.webp"
+        },
+        {
+            "name": "火影忍者-卡卡西",
+            "image": "images/火影忍者-卡卡西.jpg"
+        },
+        {
+            "name": "龙珠-孙悟饭",
+            "image": "images/龙珠-孙悟饭.webp"
+        },
+        {
+            "name": "龙珠-比克",
+            "image": "images/龙珠-比克.jpg"
+        },
+        {
+            "name": "游戏王-海马濑人",
+            "image": "images/游戏王-海马濑人.webp"
+        },
+        {
+            "name": "鬼灭之刃-祢豆子",
+            "image": "images/鬼灭之刃-祢豆子.webp"
+        }
+    ],
+    "R": [
+        {
+            "name": "原神-香菱",
+            "image": "images/原神-香菱.webp"
+        },
+        {
+            "name": "原神-芭芭拉",
+            "image": "images/原神-芭芭拉.webp"
+        },
+        {
+            "name": "海贼王-乌索普",
+            "image": "images/海贼王-乌索普.webp"
+        },
+        {
+            "name": "海贼王-娜美",
+            "image": "images/海贼王-娜美.jpg"
+        },
+        {
+            "name": "火影忍者-小樱",
+            "image": "images/火影忍者-小樱.jpg"
+        },
+        {
+            "name": "火影忍者-鹿丸",
+            "image": "images/火影忍者-鹿丸.webp"
+        },
+        {
+            "name": "龙珠-克林",
+            "image": "images/龙珠-克林.jpg"
+        },
+        {
+            "name": "龙珠-龟仙人",
+            "image": "images/龙珠-龟仙人.webp"
+        },
+        {
+            "name": "游戏王-城之内克也",
+            "image": "images/游戏王-城之内克也.jpeg"
+        },
+        {
+            "name": "鬼灭之刃-我妻善逸",
+            "image": "images/鬼灭之刃-我妻善逸.jpg"
+        }
+    ]
+}

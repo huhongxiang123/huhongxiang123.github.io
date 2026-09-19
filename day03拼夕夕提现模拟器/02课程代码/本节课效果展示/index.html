@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>热门IP角色盲盒抽取器</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Microsoft YaHei", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e293b 50%,
+          #0f172a 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #e2e8f0;
+      }
+
+      .container {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 800px;
+        width: 100%;
+        box-shadow: 0 0 60px rgba(6, 182, 212, 0.3);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        color: #06b6d4;
+        margin-bottom: 10px;
+        font-size: 2em;
+        text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        margin-bottom: 30px;
+      }
+
+      .character-pool {
+        background: rgba(15, 23, 42, 0.8);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+      }
+
+      .character-pool h2 {
+        color: #06b6d4;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+      }
+
+      .rarity-section {
+        margin-bottom: 15px;
+      }
+
+      .rarity-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .rarity-ssr {
+        color: #ffd700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+
+      .rarity-sr {
+        color: #9b59b6;
+        text-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+      }
+
+      .rarity-r {
+        color: #3498db;
+        text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+      }
+
+      .character-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .character-tag {
+        background: rgba(30, 41, 59, 0.9);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.2);
+        color: #e2e8f0;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .btn {
+        padding: 15px 30px;
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        border-radius: 30px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-single {
+        background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+        color: white;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+      }
+
+      .btn-ten {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        color: white;
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 25px rgba(6, 182, 212, 0.5);
+        border-color: #06b6d4;
+      }
+
+      .result-container {
+        display: none;
+        animation: fadeIn 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .result-title {
+        text-align: center;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        color: #06b6d4;
+        text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+      }
+
+      .result-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+      }
+
+      .card {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 15px;
+        padding: 20px;
+        min-width: 200px;
+        height: 380px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+        animation: cardPop 0.5s;
+        position: relative;
+        perspective: 1000px;
+        border: 1px solid rgba(6, 182, 212, 0.2);
+      }
+
+      .card-inner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+      }
+
+      .card:hover .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card-front,
+      .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .card-front {
+        background: rgba(15, 23, 42, 0.9);
+      }
+
+      .card-back {
+        background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
+        color: white;
+        transform: rotateY(180deg);
+      }
+
+      .card-ssr .card-front {
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      }
+
+      .card-ssr .card-back {
+        background: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      }
+
+      .card-sr .card-front {
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+      }
+
+      .card-sr .card-back {
+        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        box-shadow: 0 0 20px rgba(155, 89, 182, 0.5);
+      }
+
+      .card-r .card-front {
+        background: rgba(15, 23, 42, 0.9);
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+      }
+
+      .card-r .card-back {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+      }
+
+      .card-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 3px solid rgba(6, 182, 212, 0.5);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+      }
+
+      .card-back-content {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .card-back-title {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .card-back-desc {
+        font-size: 0.9em;
+        opacity: 0.9;
+      }
+
+      @keyframes cardPop {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .card-ssr {
+        border: 3px solid #ffd700;
+        background: linear-gradient(135deg, #fff9e6 0%, #fff5cc 100%);
+      }
+
+      .card-sr {
+        border: 3px solid #9b59b6;
+        background: linear-gradient(135deg, #f5f0fa 0%, #e8d5f2 100%);
+      }
+
+      .card-r {
+        border: 3px solid #3498db;
+        background: linear-gradient(135deg, #e8f4fd 0%, #d4edfc 100%);
+      }
+
+      .card-rarity {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 10px;
+        color: #94a3b8;
+      }
+
+      .card-name {
+        font-size: 1.1em;
+        color: #06b6d4;
+      }
+
+      .stats {
+        margin-top: 20px;
+        text-align: center;
+        padding: 15px;
+        background: #f5f5f5;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎁 热门IP角色盲盒抽取器</h1>
+      <p class="subtitle">Python列表与循环课程项目</p>
+
+      <div class="character-pool">
+        <h2>📋 角色池</h2>
+        <div id="characterPoolDisplay"></div>
+      </div>
+
+      <div class="buttons">
+        <button class="btn btn-single" onclick="drawSingle()">🎲 单抽</button>
+        <button class="btn btn-ten" onclick="drawTen()">📦 十连抽</button>
+      </div>
+
+      <div class="result-container" id="resultContainer">
+        <div class="result-title" id="resultTitle"></div>
+        <div class="result-cards" id="resultCards"></div>
+        <div class="stats" id="stats"></div>
+      </div>
+    </div>
+
+    <script>
+      let characterPool = {};
+
+      async function loadCharacterPool() {
+        try {
+          const response = await fetch("characters.json");
+          characterPool = await response.json();
+          displayCharacterPool();
+        } catch (error) {
+          console.error("加载角色池失败:", error);
+        }
+      }
+
+      function displayCharacterPool() {
+        const container = document.getElementById("characterPoolDisplay");
+        let html = "";
+
+        for (const [rarity, characters] of Object.entries(characterPool)) {
+          const rarityClass = `rarity-${rarity.toLowerCase()}`;
+          html += `
+                    <div class="rarity-section">
+                        <div class="rarity-title ${rarityClass}">${rarity}</div>
+                        <div class="character-list">
+                            ${characters.map((char) => `<span class="character-tag">${char.name}</span>`).join("")}
+                        </div>
+                    </div>
+                `;
+        }
+
+        container.innerHTML = html;
+      }
+
+      function getRandomRarity() {
+        const rand = Math.random() * 100;
+        if (rand <= 5) return "SSR";
+        if (rand <= 25) return "SR";
+        return "R";
+      }
+
+      function drawCharacter() {
+        const rarity = getRandomRarity();
+        const characters = characterPool[rarity];
+        const character =
+          characters[Math.floor(Math.random() * characters.length)];
+        return { rarity, character };
+      }
+
+      function createCard(result, index) {
+        const cardClass = `card card-${result.rarity.toLowerCase()}`;
+        return `
+                <div class="${cardClass}" style="animation-delay: ${index * 0.1}s">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="${result.character.image}" alt="${result.character.name}" class="card-image">
+                            <div class="card-rarity rarity-${result.rarity.toLowerCase()}">${result.rarity}</div>
+                            <div class="card-name">${result.character.name}</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-content">
+                                <div class="card-back-title">${result.character.name}</div>
+                                <div class="card-back-desc">
+                                    稀有度：${result.rarity}<br>
+                                    来自热门IP角色<br>
+                                    点击卡片查看详情
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      function drawSingle() {
+        const result = drawCharacter();
+        const container = document.getElementById("resultContainer");
+        const title = document.getElementById("resultTitle");
+        const cards = document.getElementById("resultCards");
+        const stats = document.getElementById("stats");
+
+        title.textContent = "🎉 抽卡结果";
+        cards.innerHTML = createCard(result, 0);
+
+        const ssrCount = result.rarity === "SSR" ? 1 : 0;
+        const srCount = result.rarity === "SR" ? 1 : 0;
+        stats.innerHTML = `SSR: ${ssrCount} | SR: ${srCount}`;
+
+        container.style.display = "block";
+      }
+
+      function drawTen() {
+        const results = [];
+        for (let i = 0; i < 10; i++) {
+          results.push(drawCharacter());
+        }
+
+        const container = document.getElementById("resultContainer");
+        const title = document.getElementById("resultTitle");
+        const cards = document.getElementById("resultCards");
+        const stats = document.getElementById("stats");
+
+        title.textContent = "📦 十连抽结果";
+        cards.innerHTML = results
+          .map((result, index) => createCard(result, index))
+          .join("");
+
+        const ssrCount = results.filter((r) => r.rarity === "SSR").length;
+        const srCount = results.filter((r) => r.rarity === "SR").length;
+        stats.innerHTML = `SSR: ${ssrCount} | SR: ${srCount}`;
+
+        container.style.display = "block";
+      }
+
+      loadCharacterPool();
+    </script>
+  </body>
+</html>

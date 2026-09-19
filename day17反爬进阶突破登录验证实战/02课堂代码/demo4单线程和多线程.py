@@ -1,0 +1,53 @@
+#爬虫的困境1：
+#反爬，识别出来我是爬虫了，给我拒绝了
+
+#爬虫的困境2：
+#动作太规律了，睡眠时间也很固定
+
+#爬虫的困境3：
+#一直下载人家东西，会被别人发现的---快速下载
+
+import random
+
+# 课堂以豆瓣电影举例子，查看时间对比
+import requests
+from lxml import etree
+import time
+
+def caiji(url):
+    h = {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+    }
+    resp = requests.get(url=url,headers=h)
+    tree = etree.HTML(resp.text)
+    #获取每页的内容
+    infos = tree.xpath('//div[@class="info"]')
+    for i in infos:
+        #标题
+        # 标题
+        title = i.xpath('./div[@class="hd"]/a/span[1]/text()')
+        # 导演
+        daoyan = i.xpath('./div[@class="bd"]/p/text()')
+        # 评分
+        pinfen = i.xpath('.//span[@class="rating_num"]/text()')
+        # 名句
+        mingju = i.xpath('.//p[@class="quote"]/text()')
+
+        #评分
+        star = i.xpath('.//span[@class="rating_num"]/text()')
+        print(title,daoyan,pinfen,mingju)
+
+    time.sleep(random.randint(1,2))
+
+#开始计时
+start = time.time() #记录当前的时间
+for i in range(0,226,25):
+    url = f'https://movie.douban.com/top250?start={i}&filter='
+    caiji(url)
+end = time.time() #记录当前的时间
+
+print(f"总共花费了{end-start}")
+
+
+
+
